@@ -1,9 +1,8 @@
 package com.robert.szebenyi.klmtest.service;
 
-import com.robert.szebenyi.klmtest.data.entity.ItineraryView;
+import com.robert.szebenyi.klmtest.rest.dto.BookingDto;
 import com.robert.szebenyi.klmtest.rest.dto.CreateBookingRequest;
 import com.robert.szebenyi.klmtest.rest.dto.ItineraryDto;
-import com.robert.szebenyi.klmtest.service.data.ItineraryViewService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -22,6 +21,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Transactional
 @SpringBootTest
@@ -36,9 +36,6 @@ class ControllerServiceTest {
 
     @Autowired
     private ControllerService controllerService;
-
-    @Autowired
-    private ItineraryViewService itineraryViewService;
 
     static Stream<Arguments> bookingTestData() {
         return Stream.of(
@@ -57,15 +54,35 @@ class ControllerServiceTest {
         OffsetDateTime departure = OffsetDateTime.parse(departureUtc);
         controllerService.createBooking(createBookingRequest(paxName, departure, itinerarySequence));
 
-        itineraryViewService.getAllBookings().forEach(itineraryView -> {
-            assertEquals(paxName, itineraryView.getPaxName());
-            assertEquals(itinerarySequence, itineraryView.getItinerary());
-            assertEquals(departure, itineraryView.getDepartureUtc());
+        controllerService.getAllBookings().forEach(itineraryView -> {
+            assertEquals(paxName, itineraryView.paxName());
+            assertEquals(itinerarySequence, itineraryView.itinerary());
+            assertEquals(departure, itineraryView.departureUtc());
         });
     }
 
     @Test
     void getAllBookingsBeforeTest() {
+        createDefaultBookings();
+
+        List<BookingDto> allBookingsBefore = controllerService.getAllBookingsBefore(
+                OffsetDateTime.parse("2020-06-12T12:00:00+00:00"));
+        assertNotNull(allBookingsBefore);
+        assertEquals(4, allBookingsBefore.size());
+    }
+
+    @Test
+    void getAllBookingsWithSpecificAirportSequenceTest() {
+        createDefaultBookings();
+
+        List<BookingDto> foundBookings = controllerService.getAllBookingsWithSpecificAirportSequence("AMS→LHR");
+        assertNotNull(foundBookings);
+        assertEquals(3, foundBookings.size());
+
+        foundBookings.forEach(booking -> assertTrue(booking.itinerary().contains("AMS→LHR")));
+    }
+
+    private void createDefaultBookings() {
         bookingTestData().forEach(booking -> {
             String paxNameFromStream = booking.get()[0].toString();
             OffsetDateTime departureFromStream = OffsetDateTime.parse(booking.get()[1].toString());
@@ -73,11 +90,6 @@ class ControllerServiceTest {
 
             controllerService.createBooking(createBookingRequest(paxNameFromStream, departureFromStream, itineraryFromStream));
         });
-
-        List<ItineraryView> allBookingsBefore = itineraryViewService.getAllBookingsBefore(
-                OffsetDateTime.parse("2020-06-12T12:00:00+00:00"));
-        assertNotNull(allBookingsBefore);
-        assertEquals(4, allBookingsBefore.size());
     }
 
     private CreateBookingRequest createBookingRequest(String paxName, OffsetDateTime departure, String itinerarySequence) {

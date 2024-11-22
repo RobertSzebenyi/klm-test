@@ -14,4 +14,7 @@ public interface ItineraryViewRepository extends JpaRepository<ItineraryView, St
 
     @Query("SELECT booking FROM ItineraryView booking WHERE booking.departureUtc < :departureUtc")
     List<ItineraryView> findAllBeforeDepartureUtc(@Param("departureUtc") OffsetDateTime departureUtc);
+
+    @Query("SELECT iv FROM ItineraryView iv WHERE iv.itinerary LIKE %:airportSequence%")
+    List<ItineraryView> findAllByItinerary(@Param("airportSequence") String airportSequence);
 }

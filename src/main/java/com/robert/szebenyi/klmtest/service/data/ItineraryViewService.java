@@ -26,4 +26,8 @@ public class ItineraryViewService {
         return itineraryViewRepository.findAllBeforeDepartureUtc(departureUtc);
     }
 
+    public List<ItineraryView> getAllBookingsWithSpecificAirportSequence(String airportSequence) {
+        return itineraryViewRepository.findAllByItinerary(airportSequence);
+    }
+
 }

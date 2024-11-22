@@ -14,7 +14,6 @@ public class Airport extends BaseEntity {
     @Column(name = "name", columnDefinition = "varchar(255)", nullable = false)
     String name;
 
-    // Needed for JPA TODO check later
     public Airport() {
     }
 
