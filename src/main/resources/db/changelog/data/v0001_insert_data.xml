@@ -1,0 +1,187 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="insert_data" author="szebenyi.robert89@gmail.com">
+		<insert tableName="airports">
+			<column name="iata_code" value="LHR"/>
+			<column name="name" value="Heathrow"/>
+		</insert>
+		<insert tableName="airports">
+			<column name="iata_code" value="AMS"/>
+			<column name="name" value="Schiphol"/>
+		</insert>
+		<insert tableName="airports">
+			<column name="iata_code" value="GVA"/>
+			<column name="name" value="Geneva"/>
+		</insert>
+		<insert tableName="airports">
+			<column name="iata_code" value="AAL"/>
+			<column name="name" value="Aalborg"/>
+		</insert>
+		<insert tableName="airports">
+			<column name="iata_code" value="JFK"/>
+			<column name="name" value="John F. Kennedy"/>
+		</insert>
+		<insert tableName="airports">
+			<column name="iata_code" value="SFO"/>
+			<column name="name" value="San Francisco"/>
+		</insert>
+		<insert tableName="airports">
+			<column name="iata_code" value="CDG"/>
+			<column name="name" value="Charles de Gaulle"/>
+		</insert>
+		<insert tableName="airports">
+			<column name="iata_code" value="ATL"/>
+			<column name="name" value="Atlanta"/>
+		</insert>
+
+		<insert tableName="bookings">
+			<column name="booking_reference" value="ABC123"/>
+			<column name="pax_name" value="Alice"/>
+		</insert>
+		<insert tableName="bookings">
+			<column name="booking_reference" value="DEF456"/>
+			<column name="pax_name" value="Bruce"/>
+		</insert>
+		<insert tableName="bookings">
+			<column name="booking_reference" value="GHI789"/>
+			<column name="pax_name" value="Cindy"/>
+		</insert>
+		<insert tableName="bookings">
+			<column name="booking_reference" value="JKL012"/>
+			<column name="pax_name" value="Derek"/>
+		</insert>
+		<insert tableName="bookings">
+			<column name="booking_reference" value="MNO345"/>
+			<column name="pax_name" value="Erica"/>
+		</insert>
+		<insert tableName="bookings">
+			<column name="booking_reference" value="PQR678"/>
+			<column name="pax_name" value="Fred"/>
+		</insert>
+
+		<!-- Alice's itinerary LHR → AMS -->
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="1"/>
+			<column name="departure" valueDate="2020-05-26T06:45:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'LHR')"/>
+			<column name="sequence" value="1"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="1"/>
+			<column name="departure" valueDate="2020-05-26T08:45:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'AMS')"/>
+			<column name="sequence" value="2"/>
+		</insert>
+
+		<!-- Bruce's itinerary GVA → AMS → LHR -->
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="2"/>
+			<column name="departure" valueDate="2020-06-04T11:04:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'GVA')"/>
+			<column name="sequence" value="1"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="2"/>
+			<column name="departure" valueDate="2020-06-04T14:04:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'AMS')"/>
+			<column name="sequence" value="2"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="2"/>
+			<column name="departure" valueDate="2020-06-04T17:04:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'LHR')"/>
+			<column name="sequence" value="3"/>
+		</insert>
+
+		<!-- Cindy's itinerary AAL → AMS → LHR → JFK → SFO -->
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="3"/>
+			<column name="departure" valueDate="2020-06-06T10:00:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'AAL')"/>
+			<column name="sequence" value="1"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="3"/>
+			<column name="departure" valueDate="2020-06-06T13:00:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'AMS')"/>
+			<column name="sequence" value="2"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="3"/>
+			<column name="departure" valueDate="2020-06-06T15:00:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'LHR')"/>
+			<column name="sequence" value="3"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="3"/>
+			<column name="departure" valueDate="2020-06-06T17:00:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'JFK')"/>
+			<column name="sequence" value="4"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="3"/>
+			<column name="departure" valueDate="2020-06-06T19:00:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'SFO')"/>
+			<column name="sequence" value="5"/>
+		</insert>
+
+		<!-- Derek's itinerary AMS → LHR -->
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="4"/>
+			<column name="departure" valueDate="2020-06-12T08:09:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'AMS')"/>
+			<column name="sequence" value="1"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="4"/>
+			<column name="departure" valueDate="2020-06-12T10:09:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'LHR')"/>
+			<column name="sequence" value="2"/>
+		</insert>
+
+		<!-- Erica's itinerary ATL → AMS → AAL -->
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="5"/>
+			<column name="departure" valueDate="2020-06-13T20:40:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'ATL')"/>
+			<column name="sequence" value="1"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="5"/>
+			<column name="departure" valueDate="2020-06-13T22:40:00"/>
+
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'AMS')"/>
+			<column name="sequence" value="2"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="5"/>
+			<column name="departure" valueDate="2020-06-13T23:40:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'AAL')"/>
+			<column name="sequence" value="3"/>
+		</insert>
+
+		<!-- Fred's itinerary ATL → AMS → AAL -->
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="6"/>
+			<column name="departure" valueDate="2020-06-14T09:10:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'AMS')"/>
+			<column name="sequence" value="1"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="6"/>
+			<column name="departure" valueDate="2020-06-14T11:10:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'CDG')"/>
+			<column name="sequence" value="2"/>
+		</insert>
+		<insert tableName="itineraries">
+			<column name="itinerary_id" value="6"/>
+			<column name="departure" valueDate="2020-06-14T16:10:00"/>
+			<column name="airport_id" valueComputed="(SELECT id FROM airports WHERE iata_code = 'LHR')"/>
+			<column name="sequence" value="3"/>
+		</insert>
+
+	</changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,96 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+	<changeSet id="init-tables" author="szebenyi.robert89@gmail.com">
+
+		<createTable tableName="airports">
+			<column name="id" type="SERIAL" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="iata_code" type="VARCHAR(3)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="name" type="VARCHAR(255)" />
+			<column name="created_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+				<constraints nullable="false" />
+			</column>
+			<column name="last_updated_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="bookings">
+			<column name="id" type="SERIAL" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="booking_reference" type="VARCHAR(6)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="pax_name" type="VARCHAR(255)" />
+			<column name="created_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+				<constraints nullable="false" />
+			</column>
+			<column name="last_updated_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="itineraries">
+			<column name="id" type="SERIAL" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="itinerary_id" type="INT">
+				<constraints nullable="false" />
+			</column>
+			<column name="airport_id" type="INT">
+				<constraints nullable="false" />
+			</column>
+			<column name="departure" type="TIMESTAMP WITHOUT TIME ZONE">
+				<constraints nullable="false" />
+			</column>
+			<column name="sequence" type="INT">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+				<constraints nullable="false" />
+			</column>
+			<column name="last_updated_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+				baseTableName="itineraries"
+				baseColumnNames="itinerary_id"
+				referencedTableName="bookings"
+				referencedColumnNames="id"
+				constraintName="fk_itineraries_booking" />
+
+		<addForeignKeyConstraint
+				baseTableName="itineraries"
+				baseColumnNames="airport_id"
+				referencedTableName="airports"
+				referencedColumnNames="id"
+				constraintName="fk_itineraries_airports" />
+
+		<createView
+				viewName="itinerary_view"
+				replaceIfExists="true">
+			SELECT
+				b.pax_name AS pax_name,
+				MIN(i.departure) AS departure_utc,
+				STRING_AGG(a.iata_code, '→' ORDER BY i.sequence) AS itinerary
+			FROM
+				bookings b
+					JOIN
+				itineraries i ON b.id = i.itinerary_id
+					JOIN
+				airports a ON i.airport_id = a.id
+			GROUP BY
+				b.pax_name;
+		</createView>
+
+	</changeSet>
+
+</databaseChangeLog>
