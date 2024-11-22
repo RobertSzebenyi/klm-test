@@ -1,0 +1,122 @@
+openapi: 3.0.3
+info:
+  title: Booking API
+  version: '1.0'
+  description: API for managing bookings
+paths:
+  /api/booking:
+    get:
+      summary: Get all bookings
+      responses:
+        '200':
+          description: List of all bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingDto'
+    post:
+      summary: Create a new booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookingRequest'
+      responses:
+        '201':
+          description: Booking created successfully
+        '400':
+          description: Invalid input
+
+  /api/booking/before:
+    get:
+      summary: Get bookings before a specific departure date
+      parameters:
+        - name: departure
+          in: query
+          description: Departure datetime in ISO 8601 format
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: List of bookings before the specified departure date
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingDto'
+
+  /api/booking/itinerary:
+    get:
+      summary: Get bookings with a specific airport sequence
+      parameters:
+        - name: sequence
+          in: query
+          description: Airport sequence (e.g., AMS→LHR)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of bookings with the specific airport sequence
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingDto'
+
+components:
+  schemas:
+    BookingDto:
+      type: object
+      properties:
+        paxName:
+          type: string
+          description: Passenger's name
+          example: "Erica"
+        departureUtc:
+          type: string
+          format: date-time
+          description: Departure time in UTC
+          example: "2020-06-12T12:00:00+00:00"
+        itinerary:
+          type: string
+          description: Itinerary in airport sequence
+          example: "AMS→LHR→JFK"
+
+    CreateBookingRequest:
+      type: object
+      properties:
+        paxName:
+          type: string
+          description: Passenger's name
+          example: "John Doe"
+        itineraries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItineraryDto'
+          description: List of itineraries for the booking
+
+    ItineraryDto:
+      type: object
+      properties:
+        airport:
+          type: string
+          description: Airport code
+          example: "AMS"
+        arrivalUtc:
+          type: string
+          format: date-time
+          description: Arrival time in UTC
+          example: "2020-06-12T14:00:00+00:00"
+        departureUtc:
+          type: string
+          format: date-time
+          description: Departure time in UTC
+          example: "2020-06-12T12:00:00+00:00"

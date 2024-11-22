@@ -3,6 +3,7 @@ package com.robert.szebenyi.klmtest.service;
 import com.robert.szebenyi.klmtest.data.entity.Booking;
 import com.robert.szebenyi.klmtest.data.entity.Itinerary;
 import com.robert.szebenyi.klmtest.data.mapper.BookingMapper;
+import com.robert.szebenyi.klmtest.exception.ValidationException;
 import com.robert.szebenyi.klmtest.rest.dto.BookingDto;
 import com.robert.szebenyi.klmtest.rest.dto.CreateBookingRequest;
 import com.robert.szebenyi.klmtest.rest.dto.ItineraryDto;
@@ -39,6 +40,7 @@ public class ControllerService {
 
     @Transactional
     public void createBooking(CreateBookingRequest bookingRequest) {
+        validateCreateBookingRequest(bookingRequest);
         var booking = bookingService.createBooking(bookingRequest.paxName());
         createItineraries(bookingRequest.itineraries(), booking);
     }
@@ -60,5 +62,11 @@ public class ControllerService {
                 airportService.findByIata(itinerary.iataCode()),
                 itinerary.departureUtc(),
                 itinerary.sequence())).toList());
+    }
+
+    void validateCreateBookingRequest(CreateBookingRequest bookingRequest) {
+        if (bookingRequest.itineraries() == null || bookingRequest.itineraries().size() < 2) {
+            throw new ValidationException("Itinerary sequence is less then 2");
+        }
     }
 }
