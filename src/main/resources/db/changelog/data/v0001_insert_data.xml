@@ -2,7 +2,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-	<changeSet id="insert_data" author="szebenyi.robert89@gmail.com">
+	<changeSet id="insert_airport_data" author="szebenyi.robert89@gmail.com">
 		<insert tableName="airports">
 			<column name="iata_code" value="LHR"/>
 			<column name="name" value="Heathrow"/>
@@ -35,6 +35,9 @@
 			<column name="iata_code" value="ATL"/>
 			<column name="name" value="Atlanta"/>
 		</insert>
+	</changeSet>
+
+	<changeSet id="insert_bookings_and_itineraries" author="szebenyi.robert89@gmail.com" context="dev">
 
 		<insert tableName="bookings">
 			<column name="booking_reference" value="ABC123"/>

@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @Entity
 @Table(name = "itinerary_view")
@@ -43,7 +44,7 @@ public class ItineraryView {
     }
 
     public OffsetDateTime getDepartureUtc() {
-        return departureUtc;
+        return departureUtc.withOffsetSameInstant(ZoneOffset.UTC);
     }
 
     public String getItinerary() {

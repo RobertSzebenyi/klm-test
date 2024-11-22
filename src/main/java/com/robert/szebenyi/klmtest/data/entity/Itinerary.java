@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 
 @Entity
@@ -23,7 +24,7 @@ public class Itinerary extends BaseEntity {
     @JoinColumn(name = "airport_id", referencedColumnName = "id", nullable = false)
     private Airport airport;
 
-    @Column(name = "departure", nullable = false)
+    @Column(name = "departure", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime departure;
 
     @Column(name = "sequence", nullable = false)
@@ -35,7 +36,7 @@ public class Itinerary extends BaseEntity {
     public Itinerary(Booking booking, Airport airport, OffsetDateTime departure, Integer sequence) {
         this.booking = booking;
         this.airport = airport;
-        this.departure = departure;
+        this.departure = departure.withOffsetSameInstant(ZoneOffset.UTC);
         this.sequence = sequence;
     }
 
@@ -60,7 +61,8 @@ public class Itinerary extends BaseEntity {
     }
 
     public void setDeparture(OffsetDateTime departure) {
-        this.departure = departure;
+        this.departure = departure.withOffsetSameInstant(ZoneOffset.UTC);
+
     }
 
     public Integer getSequence() {

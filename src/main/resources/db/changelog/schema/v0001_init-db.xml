@@ -12,10 +12,10 @@
 				<constraints nullable="false" unique="true" />
 			</column>
 			<column name="name" type="VARCHAR(255)" />
-			<column name="created_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+			<column name="created_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITH TIME ZONE">
 				<constraints nullable="false" />
 			</column>
-			<column name="last_updated_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+			<column name="last_updated_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITH TIME ZONE">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -30,10 +30,10 @@
 			<column name="pax_name" type="VARCHAR(255)" >
 				<constraints nullable="false"/>
 			</column>
-			<column name="created_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+			<column name="created_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITH TIME ZONE">
 				<constraints nullable="false" />
 			</column>
-			<column name="last_updated_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+			<column name="last_updated_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITH TIME ZONE">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -48,16 +48,16 @@
 			<column name="airport_id" type="INT">
 				<constraints nullable="false" />
 			</column>
-			<column name="departure" type="TIMESTAMP WITHOUT TIME ZONE">
+			<column name="departure" type="TIMESTAMP WITH TIME ZONE">
 				<constraints nullable="false" />
 			</column>
 			<column name="sequence" type="INT">
 				<constraints nullable="false" />
 			</column>
-			<column name="created_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+			<column name="created_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITH TIME ZONE">
 				<constraints nullable="false" />
 			</column>
-			<column name="last_updated_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
+			<column name="last_updated_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITH TIME ZONE">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
