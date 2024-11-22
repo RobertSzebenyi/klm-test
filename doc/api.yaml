@@ -1,8 +1,10 @@
 openapi: 3.0.3
+
 info:
   title: Booking API
   version: '1.0'
   description: API for managing bookings
+
 paths:
   /api/booking:
     get:

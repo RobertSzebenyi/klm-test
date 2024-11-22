@@ -19,8 +19,8 @@ The application is ready for improvements:
 - Extra validations can be added
 - More tests can be added
 - logging can be added
-- Itinerary Sequence search can be improved to not be String search like this: `LHR→AMS` but istead using IATA codes `LHR` and `AMS` and
-  look for sequence in the database
+- Itinerary Sequence search can be improved to not be String search like this: `LHR→AMS`, but instead using IATA codes `LHR` and `AMS` and
+  look for sequence in the `Itineraries` database table
 
 # KLM assignment
 
