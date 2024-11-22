@@ -27,7 +27,9 @@
 			<column name="booking_reference" type="VARCHAR(6)">
 				<constraints nullable="false" unique="true" />
 			</column>
-			<column name="pax_name" type="VARCHAR(255)" />
+			<column name="pax_name" type="VARCHAR(255)" >
+				<constraints nullable="false"/>
+			</column>
 			<column name="created_at" defaultValueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP WITHOUT TIME ZONE">
 				<constraints nullable="false" />
 			</column>
@@ -78,6 +80,7 @@
 				viewName="itinerary_view"
 				replaceIfExists="true">
 			SELECT
+			    b.booking_reference AS booking_reference,
 				b.pax_name AS pax_name,
 				MIN(i.departure) AS departure_utc,
 				STRING_AGG(a.iata_code, '→' ORDER BY i.sequence) AS itinerary
@@ -88,7 +91,7 @@
 					JOIN
 				airports a ON i.airport_id = a.id
 			GROUP BY
-				b.pax_name;
+				b.booking_reference;
 		</createView>
 
 	</changeSet>
